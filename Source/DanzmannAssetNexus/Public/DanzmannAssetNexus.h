@@ -4,7 +4,7 @@
 
 #include "Modules/ModuleManager.h"
 
-class FDanzmannPluginModule : public IModuleInterface
+class FDanzmannAssetNexusModule : public IModuleInterface
 {
 	public:
 

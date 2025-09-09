@@ -1,15 +1,15 @@
 // Copyright (C) 2025 Vicente Danzmann. All Rights Reserved.
 
-#include "DanzmannPlugin.h"
+#include "DanzmannAssetNexus.h"
 
-#define LOCTEXT_NAMESPACE "FDanzmannPluginModule"
+#define LOCTEXT_NAMESPACE "FDanzmannAssetNexusModule"
 
-void FDanzmannPluginModule::StartupModule()
+void FDanzmannAssetNexusModule::StartupModule()
 {
 	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
 }
 
-void FDanzmannPluginModule::ShutdownModule()
+void FDanzmannAssetNexusModule::ShutdownModule()
 {
 	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
 	// we call this function before unloading the module.
@@ -17,4 +17,4 @@ void FDanzmannPluginModule::ShutdownModule()
 
 #undef LOCTEXT_NAMESPACE
 	
-IMPLEMENT_MODULE(FDanzmannPluginModule, DanzmannPlugin)
+IMPLEMENT_MODULE(FDanzmannAssetNexusModule, DanzmannAssetNexus)

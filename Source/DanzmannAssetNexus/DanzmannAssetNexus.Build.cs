@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class DanzmannPlugin : ModuleRules
+public class DanzmannAssetNexus : ModuleRules
 {
-	public DanzmannPlugin(ReadOnlyTargetRules Target) : base(Target)
+	public DanzmannAssetNexus(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		

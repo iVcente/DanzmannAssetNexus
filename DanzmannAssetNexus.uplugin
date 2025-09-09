@@ -2,12 +2,12 @@
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "1.1",
-	"FriendlyName": "DanzmannPlugin",
+	"FriendlyName": "DanzmannAssetNexus",
 	"Description": "A description for the plugin.",
 	"Category": "Danzmann",
 	"CreatedBy": "Vicente Danzmann",
 	"CreatedByURL": "https://github.com/iVcente",
-	"DocsURL": "https://github.com/iVcente/DanzmannPlugin/blob/main/README.md",
+	"DocsURL": "https://github.com/iVcente/DanzmannAssetNexus/blob/main/README.md",
 	"MarketplaceURL": "",
 	"SupportURL": "",
 	"CanContainContent": false,
@@ -16,15 +16,9 @@
 	"Installed": false,
 	"Modules": [
 		{
-			"Name": "DanzmannPlugin",
+			"Name": "DanzmannAssetNexus",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
-		}
-	],
-	"Plugins": [
-		{
-			"Name": "EnhancedInput",
-			"Enabled": true
 		}
 	]
 }
