@@ -1,4 +1,4 @@
-# Plugin Name
+# DanzmannAssetNexus
 An extension of Asset Manager that allows similar behavior
 of Loading, Preloading and Unloading Primary Assets, but for
 any `TSoftObjectPtr` or `TSoftClassPtr` as well.
