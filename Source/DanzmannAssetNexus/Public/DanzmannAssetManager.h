@@ -97,7 +97,7 @@ class DANZMANNASSETNEXUS_API UDanzmannAssetManager : public UAssetManager
 		 * Get a reference to Danzmann Asset Manager.
 		 * @return A reference to UDanzmannAssetManager.
 		 */
-		static UDanzmannAssetManager& Get();
+		static UDanzmannAssetManager* Get();
 
 		/**
 		 * Preload a list of assets (as TSoftObjectPtr or TSoftClassPtr) asynchronously.

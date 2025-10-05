@@ -4,19 +4,19 @@
 
 #include "DanzmannLogDanzmannAssetNexus.h"
 
-UDanzmannAssetManager& UDanzmannAssetManager::Get()
+UDanzmannAssetManager* UDanzmannAssetManager::Get()
 {
 	checkf(GEngine != nullptr, TEXT("[%hs] UEngine is invalid."), __FUNCTION__);
 
 	if (UDanzmannAssetManager* DanzmannAssetManager = Cast<UDanzmannAssetManager>(GEngine->AssetManager))
 	{
-		return *DanzmannAssetManager;
+		return DanzmannAssetManager;
 	}
 
 	UE_LOG(LogDanzmannAssetNexus, Fatal, TEXT("[%hs] AssetManagerClassName in DefaultEngine.ini is invalid. It must be set to UDanzmannAssetManager."), __FUNCTION__);
 
 	// Fatal error above prevents this from being called
-	return *NewObject<UDanzmannAssetManager>();
+	return NewObject<UDanzmannAssetManager>();
 }
 
 int32 UDanzmannAssetManager::UnloadLoadedSoftAssets(const FGameplayTag& BundleToUnload, const bool bExactMatch)
@@ -49,11 +49,11 @@ void UDanzmannAssetManager::DumpLoadedSoftAssets()
 {
 	checkf(UDanzmannAssetManager::IsInitialized(), TEXT("[%hs] UDanzmannAssetManager isn't initialized."), __FUNCTION__);
 
-	UDanzmannAssetManager& AssetManager = Get();
+	UDanzmannAssetManager* AssetManager = Get();
 
 	UE_LOG(LogDanzmannAssetNexus, Log, TEXT("=========== Danzmann Asset Manager Loaded Soft Assets ==========="));
 
-	for (TPair<FGameplayTag, FDanzmannAssetManagerBundle>& Bundle : AssetManager.Bundles)
+	for (TPair<FGameplayTag, FDanzmannAssetManagerBundle>& Bundle : AssetManager->Bundles)
 	{
 		UE_LOG(LogDanzmannAssetNexus, Log, TEXT("\tBundle: %s"), *Bundle.Key.ToString());
 
