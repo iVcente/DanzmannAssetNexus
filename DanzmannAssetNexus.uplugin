@@ -1,9 +1,9 @@
 {
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "1.1",
+	"VersionName": "1.0",
 	"FriendlyName": "DanzmannAssetNexus",
-	"Description": "A description for the plugin.",
+	"Description": "An extension of Asset Manager that allows similar behavior of Preloading, Loading and Unloading Primary Assets, but for any TSoftObjectPtr or TSoftClassPtr as well.",
 	"Category": "Danzmann",
 	"CreatedBy": "Vicente Danzmann",
 	"CreatedByURL": "https://github.com/iVcente",
