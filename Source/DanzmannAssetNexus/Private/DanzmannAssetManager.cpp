@@ -19,91 +19,30 @@ UDanzmannAssetManager& UDanzmannAssetManager::Get()
 	return *NewObject<UDanzmannAssetManager>();
 }
 
-TSharedPtr<FStreamableHandle> UDanzmannAssetManager::PreloadSoftAssets(const TArray<TSoftObjectPtr<UObject>>& AssetsToPreload, FStreamableDelegateWithHandle&& Delegate)
+int32 UDanzmannAssetManager::UnloadLoadedSoftAssets(const FGameplayTag& BundleToUnload, const bool bExactMatch)
 {
-	TArray<FSoftObjectPath> AssetsPath;
-	AssetsPath.Reserve(AssetsToPreload.Num());
-
-	for (const TSoftObjectPtr<UObject>& AssetToPreload : AssetsToPreload)
-	{
-		if (!AssetToPreload.IsNull())
-		{
-			AssetsPath.Add(AssetToPreload.ToSoftObjectPath());
-		}
-	}
+	checkf(BundleToUnload != FGameplayTag::EmptyTag, TEXT("UnloadLoadedSoftAssets() only supports non empty BundleToUnload."));
 	
-	return GetStreamableManager().RequestAsyncLoad(MoveTemp(AssetsPath), MoveTemp(Delegate));
-}
-
-TSharedPtr<FStreamableHandle> UDanzmannAssetManager::LoadSoftAssets(const TArray<TSoftObjectPtr<UObject>>& AssetsToLoad, FStreamableDelegateWithHandle&& Delegate, const EDanzmannAssetBundle Bundle)
-{
-	FStreamableDelegateWithHandle CallerDelegate = MoveTemp(Delegate);
-	
-	TSharedPtr<FStreamableHandle> StreamableHandle = PreloadSoftAssets(
-		AssetsToLoad,
-		FStreamableDelegateWithHandle::CreateWeakLambda(
-			this,
-			[this, Bundle, CallerDelegate]
-			(const TSharedPtr<FStreamableHandle>& Handle)
-			{
-				// Store strong references to loaded assets
-				TArray<UObject*> LoadedAssets;
-				Handle->GetLoadedAssets(LoadedAssets);
-
-				FDanzmannAssetManagerBundle& BundleToStoreLoadedAssets = Bundles.FindOrAdd(Bundle);
-
-				for (const UObject* LoadedAsset : LoadedAssets)
-				{
-					BundleToStoreLoadedAssets.AddAsset(LoadedAsset);
-				}
-
-				// Execute caller's delegate
-				CallerDelegate.Execute(Handle);
-			}
-		)
-	);
-
-	return StreamableHandle;
-}
-
-void UDanzmannAssetManager::UnloadLoadedSoftAssets(const TArray<TSoftObjectPtr<UObject>>& AssetsToUnload)
-{
-	TArray<EDanzmannAssetBundle> Keys;
+	TArray<FGameplayTag> Keys;
 	Bundles.GetKeys(Keys);
 
-	for (const EDanzmannAssetBundle Key : Keys)
-	{
-		FDanzmannAssetManagerBundle* Bundle = Bundles.Find(Key);
+	int32 NumBundlesRemoved = 0;
 
-		for (const TSoftObjectPtr<UObject>& AssetToUnload : AssetsToUnload)
+	for (const FGameplayTag& Key : Keys)
+	{
+		if (bExactMatch && BundleToUnload.MatchesTagExact(Key))
 		{
-			Bundle->RemoveAsset(AssetToUnload);
+			NumBundlesRemoved += Bundles.Remove(Key);
+			break;
+		}
+
+		if (BundleToUnload.MatchesTag(Key))
+		{
+			NumBundlesRemoved += Bundles.Remove(Key);
 		}
 	}
-}
 
-void UDanzmannAssetManager::UnloadLoadedSoftAssets(const TArray<UObject*>& AssetsToUnload)
-{
-	TArray<EDanzmannAssetBundle> Keys;
-	Bundles.GetKeys(Keys);
-
-	for (const EDanzmannAssetBundle Key : Keys)
-	{
-		FDanzmannAssetManagerBundle* Bundle = Bundles.Find(Key);
-
-		for (const UObject* AssetToUnload : AssetsToUnload)
-		{
-			Bundle->RemoveAsset(AssetToUnload);
-		}
-	}
-}
-
-void UDanzmannAssetManager::UnloadLoadedSoftAssets(const EDanzmannAssetBundle BundleToUnload)
-{
-	if (Bundles.Contains(BundleToUnload))
-	{
-		Bundles.Remove(BundleToUnload);
-	}
+	return NumBundlesRemoved;
 }
 
 void UDanzmannAssetManager::DumpLoadedSoftAssets()
@@ -114,13 +53,16 @@ void UDanzmannAssetManager::DumpLoadedSoftAssets()
 
 	UE_LOG(LogDanzmannAssetNexus, Log, TEXT("=========== Danzmann Asset Manager Loaded Soft Assets ==========="));
 
-	for (TPair<EDanzmannAssetBundle, FDanzmannAssetManagerBundle>& Bundle : AssetManager.Bundles)
+	for (TPair<FGameplayTag, FDanzmannAssetManagerBundle>& Bundle : AssetManager.Bundles)
 	{
-		UE_LOG(LogDanzmannAssetNexus, Log, TEXT("\tBundle: %s"), *UEnum::GetValueAsString(Bundle.Key));
+		UE_LOG(LogDanzmannAssetNexus, Log, TEXT("\tBundle: %s"), *Bundle.Key.ToString());
+
+		TArray<FString> AssetsNames;
+		Bundle.Value.GetAssetsName(AssetsNames);
 		
-		for (const UObject* Asset : Bundle.Value.GetAssets())
+		for (const FString& AssetName : AssetsNames)
 		{
-			UE_LOG(LogDanzmannAssetNexus, Log, TEXT("\t  -> Asset: %s"), *Asset->GetName());
+			UE_LOG(LogDanzmannAssetNexus, Log, TEXT("\t  -> Asset: %s"), *AssetName);
 		}
 	}
 }
@@ -131,7 +73,7 @@ void UDanzmannAssetManager::DumpLoadedSoftAssets()
 
 static FAutoConsoleCommand CVarDumpLoadedSoftAssets(
 	TEXT("DanzmannAssetManager.DumpLoadedSoftAssets"),
-	TEXT("Shows a list of currently Loaded soft assets by the Danzmann Asset Manager."),
+	TEXT("Print a list of currently Loaded soft assets by the Danzmann Asset Manager."),
 	FConsoleCommandDelegate::CreateStatic(UDanzmannAssetManager::DumpLoadedSoftAssets),
 	ECVF_Cheat
 );

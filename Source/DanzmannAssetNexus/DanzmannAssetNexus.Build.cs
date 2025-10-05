@@ -12,7 +12,9 @@ public class DanzmannAssetNexus : ModuleRules
 			new string[]
 			{
 				"Core",
-				"Engine"
+				"DanzmannMetaprogrammingUtils",
+				"Engine",
+				"GameplayTags"
 			}
 		);
 		
