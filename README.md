@@ -8,7 +8,7 @@ Dependencies:
 
 ## Usage Example
 
-> Make sure you have added the `DanzmannAssetNexus` module to your project's Build.cs file and have downloaded the plugin `DanzmannMetaprogrammingUtils` as well. Also, enable `DanzmannAssetNexus` in your `.uproject` file.
+> Make sure you have added the `DanzmannAssetNexus` module to your project's `Build.cs` file and have downloaded the plugin `DanzmannMetaprogrammingUtils` as well. Also, enable `DanzmannAssetNexus` in your `.uproject` file.
 
 #### Load TSoftObjectPtr<> and TSoftClassPtr<>
 Loaded assets stay in memory until explicitly told otherwise.
