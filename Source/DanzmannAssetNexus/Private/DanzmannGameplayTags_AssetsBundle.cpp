@@ -1,4 +1,4 @@
-// Copyright (C) 2025 Dancing Man Games. All Rights Reserved.
+// Copyright (C) 2025 Vicente Danzmann. All Rights Reserved.
 
 #include "DanzmannGameplayTags_AssetsBundle.h"
 

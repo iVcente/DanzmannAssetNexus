@@ -32,7 +32,7 @@ FStreamableDelegateWithHandle Delegate = FStreamableDelegateWithHandle::CreateLa
 TArray<TSoftObjectPtr<UObject>> ObjectsToLoad;
 const TArray<TSoftClassPtr<APawn>> ClassesToLoad;
 
-// You can specify a Bundle -- in the form a FGameplayTag -- to organize the Loaded assets.
+// You can specify a Bundle -- in the form of a FGameplayTag -- to organize the Loaded assets.
 // If no Bundle is passed, all assets are stored in a default Bundle.
 UDanzmannAssetManager::Get()->LoadSoftAssets(ObjectsToLoad, MoveTemp(Delegate), FGameplayTag());
 TSharedPtr<FStreamableHandle> StreamableHandle = UDanzmannAssetManager::Get()->LoadSoftAssets(ClassesToLoad, MoveTemp(Delegate));
